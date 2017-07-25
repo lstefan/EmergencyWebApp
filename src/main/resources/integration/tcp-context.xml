@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:int="http://www.springframework.org/schema/integration"
+	   xmlns:int-ip="http://www.springframework.org/schema/integration/ip"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/integration/ip http://www.springframework.org/schema/integration/ip/spring-integration-ip.xsd">
+
+	<!-- Activates replacement of ${...} placeholders by registering a
+        PropertySourcesPlaceholderConfigurer within the application context
+    -->
+	<context:property-placeholder />
+
+
+	<bean id="mapper"
+		  class="org.springframework.integration.ip.tcp.connection.MessageConvertingTcpMessageMapper">
+		<constructor-arg name="messageConverter">
+			<bean class="org.springframework.integration.support.converter.MapMessageConverter">
+				<property name="headerNames">
+					<list>
+						<value>correlationId</value>
+						<value>sequenceNumber</value>
+						<value>sequenceSize</value>
+					</list>
+				</property>
+			</bean>
+		</constructor-arg>
+	</bean>
+
+	<!--&lt;!&ndash; client &ndash;&gt;-->
+
+	<!--<int:gateway id="gw"-->
+				 <!--service-interface="ro.pub.cs.tcp.SimpleGateway"-->
+				 <!--default-request-channel="input"-->
+				 <!--default-reply-channel="output"/>-->
+
+	<!--<int-ip:tcp-connection-factory id="client"-->
+								   <!--type="client"-->
+								   <!--host="localhost"-->
+								   <!--port="999"-->
+								   <!--single-use="false"-->
+								   <!--so-timeout="10000"-->
+								   <!--serializer="jsonSerializer"-->
+								   <!--deserializer="jsonSerializer"/>-->
+
+	<!--<int-ip:tcp-outbound-gateway id="clientGateway"-->
+								 <!--request-channel="output"-->
+								 <!--connection-factory="client"-->
+								 <!--request-timeout="100000"-->
+								 <!--reply-timeout="100000"/>-->
+
+
+	<!-- server -->
+	<int-ip:tcp-connection-factory id="server"
+								   type="server"
+								   port="999"
+								   single-use="false"
+								   so-timeout="100000"
+								   so-keep-alive="true"
+								   deserializer="byteArrayRawSerializer"
+								   serializer="byteArrayRawSerializer"/>
+
+	<!--<bean id="jsonSerializer"-->
+		  <!--class="org.springframework.integration.ip.tcp.serializer.MapJsonSerializer"/>-->
+
+	<bean id="byteArrayRawSerializer" class="org.springframework.integration.ip.tcp.serializer.ByteArrayRawSerializer">
+        <property name="maxMessageSize" value="100000"/>
+    </bean>
+
+	<int:channel id="input"/>
+	<int:channel id="output"/>
+
+	<int-ip:tcp-inbound-gateway id="serverGateway"
+								request-channel="input"
+								reply-channel="output"
+								connection-factory="server"
+								reply-timeout="100000" />
+
+    <bean id="handler" class="ro.pub.cs.tcp.FileHandler"/>
+	<int:service-activator input-channel="input"
+						   output-channel="output"
+						   ref="handler"
+						   method="handleFile"/>
+
+</beans>
