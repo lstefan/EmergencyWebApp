@@ -7,5 +7,7 @@
     <js>webjar:angularjs/@angularjs.version@/angular.min.js</js>
     <js>webjar:angularjs/@angularjs.version@/angular-route.min.js</js>
     <js>webjar:angularjs/@angularjs.version@/angular-cookies.min.js</js>
+    <js>webjar:sockjs-client/1.0.2/sockjs.min.js</js>
+    <js>webjar:stomp-websocket/2.3.3/stomp.min.js</js>
    </group>
 </groups>

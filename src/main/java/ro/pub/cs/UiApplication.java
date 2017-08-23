@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @SpringBootApplication
-@EnableIntegration
-@ImportResource("classpath:/integration/tcp-context.xml")
 @Controller
 public class UiApplication {
 
