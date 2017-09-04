@@ -14,6 +14,7 @@ import java.util.List;
 @EnableWebSocketMessageBroker
 public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
+
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker("/topic");
@@ -25,10 +26,5 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/data").withSockJS();
     }
 
-//    @Override
-//    public boolean configureMessageConverters(List<MessageConverter> messageConverters) {
-//        messageConverters.add(new ByteArrayMessageConverter());
-//        return false;
-//    }
 
 }

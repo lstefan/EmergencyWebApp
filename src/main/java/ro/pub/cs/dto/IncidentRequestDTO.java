@@ -2,9 +2,6 @@ package ro.pub.cs.dto;
 
 import java.io.Serializable;
 
-/**
- *
- */
 public class IncidentRequestDTO implements Serializable {
 	private String type;
 	private String priority;

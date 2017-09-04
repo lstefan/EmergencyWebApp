@@ -4,9 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import ro.pub.cs.communication.ConnectionListener;
-
-import javax.annotation.Resource;
+import ro.pub.cs.communication.ConnectionHandler;
+import ro.pub.cs.service.IncidentService;
 
 @Configuration
 public class SocketConfig {
@@ -14,26 +13,30 @@ public class SocketConfig {
     @Autowired
     public SimpMessagingTemplate template;
 
+    @Autowired
+    public IncidentService incidentService;
+
     @Bean
-    public ConnectionListener connectionListener() {
-        ConnectionListener connectionListener = new ConnectionListener();
-        connectionListener.setTemplate(template);
-        Thread connectionThread = new Thread(connectionListener);
+    public ConnectionHandler connectionListener() {
+        ConnectionHandler connectionHandler = new ConnectionHandler();
+        connectionHandler.setTemplate(template);
+        connectionHandler.setIncidentService(incidentService);
+        Thread connectionThread = new Thread(connectionHandler);
         connectionThread.start();
 
-        return connectionListener;
+        return connectionHandler;
     }
 
 
 //    private Thread createPictureThread(ObjectInputStream objectInputStream) {
-//        PictureWorkerRunnable pictureWorkerRunnable = new PictureWorkerRunnable(objectInputStream);
+//        ImageAndMessageReader pictureWorkerRunnable = new ImageAndMessageReader(objectInputStream);
 //        Thread pictureWorkerThread = new Thread(pictureWorkerRunnable);
 //
 //        return pictureWorkerThread;
 //    }
 //
 //    private Thread createAudioThread(DatagramSocket datagramSocket) {
-//        AudioWorkerRunnable audioWorkerRunnable = new AudioWorkerRunnable(datagramSocket);
+//        AudioReader audioWorkerRunnable = new AudioReader(datagramSocket);
 //        Thread audioWorkerThread = new Thread(audioWorkerRunnable);
 //
 //        return audioWorkerThread;

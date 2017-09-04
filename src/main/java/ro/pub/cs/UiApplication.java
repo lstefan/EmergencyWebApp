@@ -36,6 +36,14 @@ public class UiApplication {
 		return user;
 	}
 
+    @RequestMapping("/username")
+    @ResponseBody
+    public Map<String, Object> userName(Principal user) {
+        Map<String, Object> model = new HashMap<String, Object>();
+        model.put("user", user.getName());
+        return model;
+    }
+
 	@RequestMapping("/resource")
 	@ResponseBody
 	public Map<String, Object> home() {
@@ -45,25 +53,24 @@ public class UiApplication {
 		return model;
 	}
 
+//	@Configuration
+//	@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+//	protected static class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+//		@Override
+//		protected void configure(HttpSecurity http) throws Exception {
+//			// @formatter:off
+//			http
+//				.httpBasic().and()
+//				.authorizeRequests()
+//					.antMatchers("/index.html", "/", "/login", "/dashboard", "/home", "/incidents").permitAll()
+//					.anyRequest().authenticated()
+//					.and()
+//					.csrf().disable();
+//			// @formatter:on
+//		}
+//	}
+
 	public static void main(String[] args) {
 		SpringApplication.run(UiApplication.class, args);
 	}
-
-	@Configuration
-	@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
-	protected static class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-		@Override
-		protected void configure(HttpSecurity http) throws Exception {
-			// @formatter:off
-			http
-				.httpBasic().and()
-				.authorizeRequests()
-					.antMatchers("/index.html", "/", "/login", "/dashboard", "/home", "/incidents").permitAll()
-					.anyRequest().authenticated()
-					.and()
-					.csrf().disable();
-			// @formatter:on
-		}
-	}
-
 }

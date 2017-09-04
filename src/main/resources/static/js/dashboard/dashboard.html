@@ -5,7 +5,7 @@
 <!--</div>-->
 
 <div class="row">
-	<div class="col-md-5">
+	<div class="col-md-4">
 		<label>Location 44.435719, 26.047784 - Bulevardul Iuliu Maniu 13 Bucuresti</label>
 		<div id="map_canvas">
 			<ui-gmap-google-map center="map.center" options="map.options" zoom="map.zoom" draggable="true">
@@ -14,14 +14,19 @@
 			</ui-gmap-google-map>
 		</div>
 	</div>
-	<div class="col-md-4">
-		<label>Video transmission</label>
-		<input id="greetings" type='text'>
+	<div class="col-md-5">
 		<!--<img src="http://www.observatordebacau.ro/wp-content/uploads/2017/04/smurd-1346071316-1.jpg" class="img-responsive">-->
-
-		<div ng-repeat="imageSrc in imageSrcList">
-			<img id="ItemPreview" ng-src="{{imageSrc}}" ng-if="!!imageSrc" />
+		<div class="text-center">
+            <label>Video transmission</label>
+			<img id="ItemPreview" ng-src="{{imageSrc}}" ng-if="!!imageSrc" style="width: 400px; height:300px;"/>
 		</div>
+
+		<!--<audio controls="controls" autobuffer="autobuffer" autoplay="autoplay">-->
+			<!--<source ng-src="{{audioSrc}}" ng-if="!!audioSrc"/>-->
+		<!--</audio>-->
+		<!--<div ng-repeat="imageSrc in imageSrcList">-->
+			<!--<img id="ItemPreview" ng-src="{{imageSrc}}" ng-if="!!imageSrc" />-->
+		<!--</div>-->
 
 		<br>
 
@@ -63,61 +68,20 @@
 				</div>
 			</div>
 			<div class="panel-body">
-				<ul class="chat">
-					<li class="left clearfix"><span class="chat-img pull-left">
-                            <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle"/>
+				<ul class="chat" ng-repeat="message in messages track by $index | orderBy:'time':true">
+					<li ng-class="message.mine ? 'left clearfix' : 'right clearfix'"><span ng-class="message.mine ? 'chat-img pull-left' : 'chat-img pull-right'">
+                            <img ng-src="{{message.mine ? 'http://placehold.it/50/55C1E7/fff&text=Dr' : 'http://placehold.it/50/FA6F57/fff&text=S'}}"
+								 alt="User Avatar" class="img-circle"/>
                         </span>
 						<div class="chat-body clearfix">
 							<div class="header">
-								<strong class="primary-font">Dr. Ionescu</strong>
-								<small class="pull-right text-muted">
-									<span class="glyphicon glyphicon-time"></span>12 mins ago
+								<strong ng-class="message.mine ? 'primary-font' : 'pull-right primary-font'">{{message.user}}</strong>
+								<small ng-class="message.mine ? 'pull-right text-muted' : 'text-muted'">
+									<span class="glyphicon glyphicon-time"></span>{{message.time | date:'HH:mm'}}
 								</small>
 							</div>
-							<p>
-								Salutare! Nu va inteleg foarte bine. Va rog sa comunicam pe chat.
-							</p>
-						</div>
-					</li>
-					<li class="right clearfix"><span class="chat-img pull-right">
-                            <img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle"/>
-                        </span>
-						<div class="chat-body clearfix">
-							<div class="header">
-								<small class=" text-muted"><span class="glyphicon glyphicon-time"></span>13 mins ago</small>
-								<strong class="pull-right primary-font">Livia Android</strong>
-							</div>
-							<p>
-								Ok. Este galagie la fata locului.
-							</p>
-						</div>
-					</li>
-					<li class="left clearfix"><span class="chat-img pull-left">
-                            <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle"/>
-                        </span>
-						<div class="chat-body clearfix">
-							<div class="header">
-								<strong class="primary-font">Dr. Ionescu</strong>
-								<small class="pull-right text-muted">
-									<span class="glyphicon glyphicon-time"></span>14 mins ago
-								</small>
-							</div>
-							<p>
-								Detaliati-mi va rog situatia de la fata locului.
-							</p>
-						</div>
-					</li>
-					<li class="right clearfix"><span class="chat-img pull-right">
-                            <img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle"/>
-                        </span>
-						<div class="chat-body clearfix">
-							<div class="header">
-								<small class=" text-muted"><span class="glyphicon glyphicon-time"></span>15 mins ago</small>
-								<strong class="pull-right primary-font">Livia Android</strong>
-							</div>
-							<p>
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare
-								dolor, quis ullamcorper ligula sodales.
+							<p ng-class="{self: message.self}">
+								{{message.message}}
 							</p>
 						</div>
 					</li>
@@ -125,9 +89,9 @@
 			</div>
 			<div class="panel-footer">
 				<div class="input-group">
-					<input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..."/>
+					<input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." ng-model="message"/>
 					<span class="input-group-btn">
-                            <button class="btn btn-warning btn-sm" id="btn-chat">
+                            <button ng-click="addMessage()" class="btn btn-warning btn-sm" id="btn-chat">
                                 Send</button>
                         </span>
 				</div>
@@ -135,19 +99,42 @@
 		</div>
 	</div>
 
-	<div class="container">
-		<form ng-submit="addMessage()" name="messageForm">
-			<input type="text" placeholder="Compose a new message..." ng-model="message" />
-			<div class="info">
-				<span class="count" ng-bind="max - message.length" ng-class="{danger: message.length > max}">140</span>
-				<button ng-disabled="message.length > max || message.length === 0">Send</button>
+	<!--<div class="container">-->
+		<!--<form ng-submit="addMessage()" name="messageForm">-->
+			<!--<input type="text" placeholder="Compose a new message..." ng-model="message" />-->
+			<!--<div class="info">-->
+				<!--<span class="count" ng-bind="max - message.length" ng-class="{danger: message.length > max}">140</span>-->
+				<!--<button ng-disabled="message.length > max || message.length === 0">Send</button>-->
+			<!--</div>-->
+		<!--</form>-->
+		<!--<hr />-->
+		<!--<p ng-repeat="message in messages track by $index | orderBy:'time':true" class="message">-->
+			<!--<time>{{message.time | date:'HH:mm'}}</time>-->
+			<!--<span ng-class="{self: message.self}">{{message.message}}</span>-->
+		<!--</p>-->
+	<!--</div>-->
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Incoming incident from user Livia Android</h4>
 			</div>
-		</form>
-		<hr />
-		<p ng-repeat="message in messages | orderBy:'time':true" class="message">
-			<time>{{message.time | date:'HH:mm'}}</time>
-			<span ng-class="{self: message.self}">{{message.message}}</span>
-		</p>
+			<div class="modal-body" ng-model="incident">
+				Incident type: {{incident.incidentType}} <br>
+				Incident priority: {{incident.priority}} <br>
+				No. of people involved: {{incident.noOfPeople}} <br>
+				Location: Bulevardul Iuliu Maniu 13 Bucuresti
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" ng-click = 'accept()' class="btn btn-primary">Accept</button>
+			</div>
+		</div>
 	</div>
 </div>
 
