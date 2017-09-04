@@ -1,4 +1,4 @@
-package ro.pub.cs.communication;
+package ro.pub.cs.service.communication;
 
 import message.Message;
 import org.springframework.messaging.simp.SimpMessagingTemplate;

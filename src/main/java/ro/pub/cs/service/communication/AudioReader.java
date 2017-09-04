@@ -1,11 +1,10 @@
-package ro.pub.cs.communication;
+package ro.pub.cs.service.communication;
 
 
 import message.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import ro.pub.cs.util.TestSound;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
