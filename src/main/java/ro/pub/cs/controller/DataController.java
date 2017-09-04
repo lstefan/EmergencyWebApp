@@ -4,8 +4,8 @@ import message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ro.pub.cs.service.communication.ClientConnection;
-import ro.pub.cs.service.communication.ConnectionHandler;
+import ro.pub.cs.communication.ClientConnection;
+import ro.pub.cs.communication.ConnectionHandler;
 
 import java.io.IOException;
 

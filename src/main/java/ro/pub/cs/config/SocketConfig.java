@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import ro.pub.cs.service.communication.ConnectionHandler;
+import ro.pub.cs.communication.ConnectionHandler;
 import ro.pub.cs.service.IncidentService;
 
 @Configuration

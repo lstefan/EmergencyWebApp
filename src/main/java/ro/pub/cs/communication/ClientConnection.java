@@ -1,4 +1,4 @@
-package ro.pub.cs.service.communication;
+package ro.pub.cs.communication;
 
 
 import java.io.ObjectInputStream;
