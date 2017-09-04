@@ -1,5 +1,5 @@
 angular
-		.module('hello', [ 'ngRoute', 'auth', 'dashboard', 'navigation' ])
+		.module('app', [ 'ngRoute', 'auth', 'home', 'dashboard', 'navigation' ])
 		.config(
 
 				function($routeProvider, $httpProvider, $locationProvider, uiGmapGoogleMapApiProvider) {
@@ -7,6 +7,10 @@ angular
 					$locationProvider.html5Mode(true);
 
 					$routeProvider.when('/', {
+						templateUrl : 'js/home/home.html',
+						controller : 'home',
+						controllerAs : 'controller'
+					}).when('/dashboard', {
 						templateUrl : 'js/dashboard/dashboard.html',
 						controller : 'dashboard',
 						controllerAs : 'controller'

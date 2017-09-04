@@ -5,8 +5,8 @@
 <!--</div>-->
 
 <div class="row">
-	<div class="col-md-4">
-		<label>Location 44.435719, 26.047784 - Bulevardul Iuliu Maniu 13 Bucuresti</label>
+	<div class="col-md-4" ng-model="incident">
+		<label>Location {{incident.initialLatitude}}, {{incident.initialLongitude}}</label>
 		<div id="map_canvas">
 			<ui-gmap-google-map center="map.center" options="map.options" zoom="map.zoom" draggable="true">
 				<ui-gmap-layer type="TrafficLayer" show="map.showTraficLayer"></ui-gmap-layer>
@@ -120,19 +120,20 @@
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
-			<div class="modal-header">
+			<div class="modal-header" ng-model="incident">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="myModalLabel">Incoming incident from user Livia Android</h4>
+				<h4 class="modal-title" id="myModalLabel">Incoming incident from user {{incident.requesterID}}</h4>
 			</div>
 			<div class="modal-body" ng-model="incident">
 				Incident type: {{incident.incidentType}} <br>
 				Incident priority: {{incident.priority}} <br>
-				No. of people involved: {{incident.noOfPeople}} <br>
-				Location: Bulevardul Iuliu Maniu 13 Bucuresti
+                No. of people involved: {{incident.noOfPeople}} <br>
+				Location: {{incident.initialLatitude}}, {{incident.initialLongitude}}
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 				<button type="button" ng-click = 'accept()' class="btn btn-primary">Accept</button>
+				<button type="button" class="btn btn-danger">Reject</button>
 			</div>
 		</div>
 	</div>
